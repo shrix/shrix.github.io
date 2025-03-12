@@ -157,8 +157,8 @@
                 <div class="mb-6">
                     <label class="block text-sm font-medium mb-2">Select Model</label>
                     <select id="model-select" class="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-2">
-                        <option value="gpt">ChatGPT (API Key Required)</option>
-                        <option value="claude">Claude (API Key Required)</option>
+                        <option value="gpt">ChatGPT (Key Reqd)</option>
+                        <option value="claude">Claude (Key Reqd)</option>
                         <option value="gemini">Gemini (Free)</option>
                         <option value="grok">Grok (Free)</option>
                     </select>
@@ -173,7 +173,7 @@
 
             <!-- Settings Button moved to bottom-right of sidebar -->
             <div class="mt-auto pt-4 border-t dark:border-gray-700 flex flex-col">
-                <div id="api-status" class="text-sm text-amber-600 dark:text-amber-400 sidebar-content">API Key required for ChatGPT</div>
+                <div id="api-status" class="text-sm text-amber-600 dark:text-amber-400 sidebar-content">API Key Reqd for ChatGPT</div>
                 <div class="flex justify-end mt-2">
                     <button id="settings-btn" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-settings">
@@ -350,10 +350,10 @@
             const hasApiKey = state.apiKeys[state.selectedModel];
 
             if (needsApiKey && !hasApiKey) {
-                apiStatus.textContent = `API Key required for ${currentModel.name}`;
+                apiStatus.textContent = `API Key Reqd for ${currentModel.name}`;
                 apiStatus.className = 'text-sm text-amber-600 dark:text-amber-400 sidebar-content';
             } else if (needsApiKey && hasApiKey) {
-                apiStatus.textContent = `${currentModel.name} API Key set`;
+                apiStatus.textContent = `${currentModel.name} API Key Set`;
                 apiStatus.className = 'text-sm text-green-600 dark:text-green-400 sidebar-content';
             } else {
                 apiStatus.textContent = 'Free access available';
