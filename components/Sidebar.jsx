@@ -56,16 +56,16 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
               title={collapsed ? "Show sidebar" : "Hide sidebar"}
             >
               {collapsed ? (
-                // Show sidebar icon (when sidebar is collapsed)
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                // Show sidebar icon (when sidebar is collapsed) - lighter version
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect width="18" height="18" x="3" y="3" rx="2" ry="2" strokeWidth="1.5"></rect>
+                  <line x1="9" y1="3" x2="9" y2="21" strokeWidth="1.5"></line>
                 </svg>
               ) : (
-                // Hide sidebar icon (when sidebar is expanded)
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                // Hide sidebar icon (when sidebar is expanded) - lighter version
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2z" strokeWidth="1.5"></path>
+                  <polyline points="9 8 5 12 9 16" strokeWidth="1.5"></polyline>
                 </svg>
               )}
             </button>
