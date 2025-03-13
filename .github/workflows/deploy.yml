@@ -1,8 +1,16 @@
-name: Deploy to GitHub Pages
+name: Deploy Next.js to GitHub Pages
 
 on:
   push:
     branches: [main]
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'layouts/**'
+      - 'lib/**'
+      - 'public/**'
+      - 'next.config.js'
+      - 'package.json'
   workflow_dispatch:
 
 permissions:
@@ -29,12 +37,30 @@ jobs:
         run: npm ci
       - name: Build with Next.js
         run: npm run build
-      - name: Copy root files to out directory
-        run: |
-          cp index.html out/
-          cp CNAME out/
-      - name: Deploy to GitHub Pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v3
         with:
-          folder: out
-          branch: gh-pages 
+          ref: gh-pages
+          path: gh-pages-branch
+      - name: Prepare for deployment
+        run: |
+          # Copy the built Next.js app to the chat directory
+          mkdir -p gh-pages-branch/chat
+          cp -r out/* gh-pages-branch/chat/
+          
+          # Ensure .nojekyll and CNAME files exist
+          touch gh-pages-branch/.nojekyll
+          echo "shrix.com" > gh-pages-branch/CNAME
+          
+          # Copy the root index.html if it doesn't exist
+          if [ ! -f gh-pages-branch/index.html ]; then
+            cp index.html gh-pages-branch/
+          fi
+      - name: Deploy to GitHub Pages
+        run: |
+          cd gh-pages-branch
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "Deploy Next.js app to /chat directory" || echo "No changes to commit"
+          git push 
