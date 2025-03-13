@@ -37,10 +37,17 @@ jobs:
         run: npm ci
       - name: Build with Next.js
         run: npm run build
+      - name: Prepare for deployment
+        run: |
+          # Ensure .nojekyll file exists in the output directory
+          touch out/.nojekyll
+          
+          # Ensure CNAME file exists in the output directory
+          echo "shrix.com" > out/CNAME
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./out
-          destination_dir: chat
+          force_orphan: false
           keep_files: true 
