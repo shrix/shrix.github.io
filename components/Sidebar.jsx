@@ -53,21 +53,19 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
             <button 
               className="p-[2px] rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
               onClick={() => setCollapsed(!collapsed)}
-              title={collapsed ? "Show sidebar" : "Hide sidebar"}
+              title={collapsed ? "Pin sidebar" : "Unpin sidebar"}
             >
               {collapsed ? (
-                // Show sidebar icon (when sidebar is collapsed) - from icon-icons.com
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="2" y="2" width="20" height="20" rx="2" strokeWidth="1.5" />
-                  <rect x="14" y="2" width="8" height="20" strokeWidth="1.5" />
-                  <path d="M10 12H6M6 12L8 10M6 12L8 14" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                // Pin sidebar icon (when sidebar is collapsed) - Claude desktop style
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="4" y1="12" x2="20" y2="12" />
+                  <polyline points="15 7 20 12 15 17" />
                 </svg>
               ) : (
-                // Hide sidebar icon (when sidebar is expanded) - from icon-icons.com
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                  <rect x="2" y="2" width="20" height="20" rx="2" strokeWidth="1.5" />
-                  <rect x="2" y="2" width="8" height="20" strokeWidth="1.5" />
-                  <path d="M14 12H18M18 12L16 10M18 12L16 14" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                // Unpin sidebar icon (when sidebar is expanded) - Claude desktop style
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="20" y1="12" x2="4" y2="12" />
+                  <polyline points="9 7 4 12 9 17" />
                 </svg>
               )}
             </button>
