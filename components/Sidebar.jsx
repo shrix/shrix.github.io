@@ -38,10 +38,10 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-xl font-bold">Chat</h1>
           {/* Icons in the top-right corner */}
-          <div className="flex items-center space-x-0">
+          <div className="flex items-center gap-[1px]">
             <ThemeToggle />
             <button 
-              className="p-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+              className="p-[1px] rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
               onClick={openSettings}
               title="Settings"
             >
@@ -51,7 +51,7 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
               </svg>
             </button>
             <button 
-              className="p-0 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+              className="p-[1px] rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
               onClick={() => setCollapsed(!collapsed)}
               title={collapsed ? "Pin sidebar open" : "Collapse sidebar"}
             >
