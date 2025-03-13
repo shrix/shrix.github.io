@@ -18,6 +18,9 @@ node_modules
 .DS_Store
 *.pem
 tmp_*
+.vscode/
+.idea/
+*.log
 
 # debug
 npm-debug.log*
@@ -26,6 +29,7 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # vercel
 .vercel
@@ -33,3 +37,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
