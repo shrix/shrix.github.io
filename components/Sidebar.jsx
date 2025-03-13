@@ -19,8 +19,13 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
     } else if (selectedModel === 'claude') {
       setApiStatus(claudeKey ? 'Claude API Key set' : 'API Key Reqd for Claude')
     } else {
-      setApiStatus(`${selectedModel.charAt(0).toUpperCase() + selectedModel.slice(1)} (Free)`)
+      setApiStatus(`Gemini Flash 2.0 (Free)`)
     }
+  }, [selectedModel])
+
+  // Save selected model to localStorage when it changes
+  useEffect(() => {
+    localStorage.setItem('selectedModel', selectedModel)
   }, [selectedModel])
 
   // Determine if sidebar should be visible
@@ -81,10 +86,9 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
           >
-            <option value="gpt">ChatGPT (API Key Reqd)</option>
-            <option value="claude">Claude (API Key Reqd)</option>
-            <option value="gemini">Gemini (Free)</option>
-            <option value="grok">Grok (Free)</option>
+            <option value="gpt">ChatGPT 3.5 Turbo (API Key)</option>
+            <option value="claude">Claude Instant (API Key)</option>
+            <option value="gemini">Gemini Flash 2.0 (Free)</option>
           </select>
         </div>
 

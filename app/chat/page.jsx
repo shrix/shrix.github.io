@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import ChatLayout from '../../layouts/ChatLayout'
 import ChatContainer from '../../components/ChatContainer'
 import MessageInput from '../../components/MessageInput'
@@ -8,6 +8,28 @@ import MessageInput from '../../components/MessageInput'
 export default function ChatPage() {
   const [messages, setMessages] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [selectedModel, setSelectedModel] = useState('gpt')
+
+  // Get the selected model from localStorage when component mounts
+  useEffect(() => {
+    const storedModel = localStorage.getItem('selectedModel')
+    if (storedModel) {
+      setSelectedModel(storedModel)
+    }
+  }, [])
+
+  // Listen for changes to the selected model in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const storedModel = localStorage.getItem('selectedModel')
+      if (storedModel && storedModel !== selectedModel) {
+        setSelectedModel(storedModel)
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
+  }, [selectedModel])
 
   const handleSendMessage = async (content) => {
     // Add user message to chat
@@ -16,9 +38,6 @@ export default function ChatPage() {
     setIsLoading(true)
 
     try {
-      // Get selected model from localStorage or default to 'gpt'
-      const selectedModel = localStorage.getItem('selectedModel') || 'gpt'
-      
       // Send to API and get response
       const response = await fetch('/api/chat', {
         method: 'POST',
