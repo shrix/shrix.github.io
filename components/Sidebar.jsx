@@ -56,18 +56,18 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
               title={collapsed ? "Pin sidebar" : "Unpin sidebar"}
             >
               {collapsed ? (
-                // Pin sidebar icon (when sidebar is collapsed) - Claude desktop style with vertical line
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="4" y1="12" x2="20" y2="12" />
-                  <polyline points="15 7 20 12 15 17" />
-                  <line x1="20" y1="5" x2="20" y2="19" />
+                // Enhanced pin sidebar icon (when sidebar is collapsed)
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="5" y1="12" x2="19" y2="12" />
+                  <polyline points="14 7 19 12 14 17" />
+                  <line x1="19" y1="4" x2="19" y2="20" strokeOpacity="0.8" />
                 </svg>
               ) : (
-                // Unpin sidebar icon (when sidebar is expanded) - Claude desktop style with vertical line
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="20" y1="12" x2="4" y2="12" />
-                  <polyline points="9 7 4 12 9 17" />
-                  <line x1="4" y1="5" x2="4" y2="19" />
+                // Enhanced unpin sidebar icon (when sidebar is expanded)
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="19" y1="12" x2="5" y2="12" />
+                  <polyline points="10 7 5 12 10 17" />
+                  <line x1="5" y1="4" x2="5" y2="20" strokeOpacity="0.8" />
                 </svg>
               )}
             </button>
