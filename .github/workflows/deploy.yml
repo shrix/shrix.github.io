@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -37,30 +37,24 @@ jobs:
         run: npm ci
       - name: Build with Next.js
         run: npm run build
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v3
-        with:
-          ref: gh-pages
-          path: gh-pages-branch
       - name: Prepare for deployment
         run: |
-          # Copy the built Next.js app to the chat directory
-          mkdir -p gh-pages-branch/chat
-          cp -r out/* gh-pages-branch/chat/
+          # Ensure .nojekyll file exists in the output directory
+          touch out/.nojekyll
           
-          # Ensure .nojekyll and CNAME files exist
-          touch gh-pages-branch/.nojekyll
-          echo "shrix.com" > gh-pages-branch/CNAME
+          # Ensure CNAME file exists in the output directory
+          echo "shrix.com" > out/CNAME
           
-          # Copy the root index.html if it doesn't exist
-          if [ ! -f gh-pages-branch/index.html ]; then
-            cp index.html gh-pages-branch/
+          # Copy the root index.html to the output directory if it doesn't exist
+          if [ ! -f out/index.html ] || grep -q "refresh" out/index.html; then
+            cp index.html out/
           fi
+      - name: Setup Pages
+        uses: actions/configure-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v2
+        with:
+          path: ./out
       - name: Deploy to GitHub Pages
-        run: |
-          cd gh-pages-branch
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git add .
-          git commit -m "Deploy Next.js app to /chat directory" || echo "No changes to commit"
-          git push 
+        id: deployment
+        uses: actions/deploy-pages@v2 
