@@ -8,6 +8,11 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
   const [apiStatus, setApiStatus] = useState('API Key Reqd for ChatGPT')
   const [isHovering, setIsHovering] = useState(false)
   const [modelDisplayName, setModelDisplayName] = useState('ChatGPT 4o Mini')
+  const [chatHistory, setChatHistory] = useState({
+    gpt: [],
+    claude: [],
+    gemini: []
+  })
 
   // Update API status and model display name when model changes
   useEffect(() => {
@@ -66,6 +71,47 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
     }
   }, [selectedModel])
 
+  // Load chat history from localStorage
+  useEffect(() => {
+    const loadChatHistory = () => {
+      try {
+        const gptMessages = JSON.parse(localStorage.getItem('gpt-messages') || '[]')
+        const claudeMessages = JSON.parse(localStorage.getItem('claude-messages') || '[]')
+        const geminiMessages = JSON.parse(localStorage.getItem('gemini-messages') || '[]')
+        
+        setChatHistory({
+          gpt: gptMessages,
+          claude: claudeMessages,
+          gemini: geminiMessages
+        })
+      } catch (e) {
+        console.error('Error loading chat history:', e)
+      }
+    }
+    
+    // Load initially
+    loadChatHistory()
+    
+    // Set up event listener for storage changes
+    const handleStorageChange = () => {
+      loadChatHistory()
+    }
+    
+    window.addEventListener('storage', handleStorageChange)
+    
+    // Custom event for when messages are updated
+    const handleMessagesUpdated = () => {
+      loadChatHistory()
+    }
+    
+    window.addEventListener('messagesUpdated', handleMessagesUpdated)
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange)
+      window.removeEventListener('messagesUpdated', handleMessagesUpdated)
+    }
+  }, [])
+
   // Listen for changes to model versions in localStorage
   useEffect(() => {
     const handleStorageChange = () => {
@@ -107,8 +153,62 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
   useEffect(() => {
     if (selectedModel !== 'gpt-temp' && selectedModel !== 'claude-temp') {
       localStorage.setItem('selectedModel', selectedModel)
+      
+      // Dispatch a custom event to notify other components
+      const event = new CustomEvent('modelChanged', { 
+        detail: { model: selectedModel } 
+      })
+      window.dispatchEvent(event)
     }
   }, [selectedModel])
+
+  // Handle model change
+  const handleModelChange = (e) => {
+    const newModel = e.target.value
+    setSelectedModel(newModel)
+  }
+  
+  // Create a new chat
+  const handleNewChat = () => {
+    if (confirm(`Start a new chat with ${modelDisplayName}? Your current conversation will remain in history.`)) {
+      // Dispatch a custom event to notify the chat page to start a new chat
+      const event = new CustomEvent('newChat', { 
+        detail: { model: selectedModel } 
+      })
+      window.dispatchEvent(event)
+    }
+  }
+
+  // Get model-specific color
+  const getModelColor = (model) => {
+    switch (model) {
+      case 'gpt':
+        return 'bg-green-100 dark:bg-green-900'
+      case 'claude':
+        return 'bg-purple-100 dark:bg-purple-900'
+      case 'gemini':
+        return 'bg-blue-100 dark:bg-blue-900'
+      default:
+        return 'bg-gray-100 dark:bg-gray-700'
+    }
+  }
+  
+  // Get first message from a conversation to use as title
+  const getChatTitle = (messages) => {
+    if (messages.length === 0) return 'New Chat'
+    
+    // Find the first user message
+    const firstUserMessage = messages.find(msg => msg.role === 'user')
+    if (!firstUserMessage) return 'New Chat'
+    
+    // Truncate the message if it's too long
+    const maxLength = 25
+    let title = firstUserMessage.content
+    if (title.length > maxLength) {
+      title = title.substring(0, maxLength) + '...'
+    }
+    return title
+  }
 
   // Determine if sidebar should be visible
   const sidebarVisible = !collapsed || isHovering
@@ -166,7 +266,7 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
           <select 
             className="w-full rounded-md border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 p-2"
             value={selectedModel}
-            onChange={(e) => setSelectedModel(e.target.value)}
+            onChange={handleModelChange}
           >
             <option value="gpt">OpenAI (API Key)</option>
             <option value="claude">Anthropic (API Key)</option>
@@ -177,10 +277,83 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
           </div>
         </div>
 
-        <div className="flex-1">
-          <button className="w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md">
+        <div className="flex-1 overflow-y-auto">
+          <button 
+            className="w-full text-left px-4 py-2 mb-4 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-md flex items-center"
+            onClick={handleNewChat}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="mr-2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
             New Chat
           </button>
+          
+          {/* Chat history section */}
+          <div className="space-y-1">
+            <h3 className="text-xs uppercase text-gray-500 dark:text-gray-400 font-semibold px-2 mb-2">Chat History</h3>
+            
+            {/* OpenAI Chats */}
+            {chatHistory.gpt.length > 0 && (
+              <div className="mb-2">
+                <div className="flex items-center px-2 mb-1">
+                  <div className="w-2 h-2 rounded-full bg-green-500 mr-2"></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">OpenAI</span>
+                </div>
+                {chatHistory.gpt.length > 0 && (
+                  <button 
+                    className={`w-full text-left px-4 py-2 text-sm truncate ${selectedModel === 'gpt' ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} rounded-md`}
+                    onClick={() => setSelectedModel('gpt')}
+                  >
+                    {getChatTitle(chatHistory.gpt)}
+                  </button>
+                )}
+              </div>
+            )}
+            
+            {/* Claude Chats */}
+            {chatHistory.claude.length > 0 && (
+              <div className="mb-2">
+                <div className="flex items-center px-2 mb-1">
+                  <div className="w-2 h-2 rounded-full bg-purple-500 mr-2"></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Anthropic</span>
+                </div>
+                {chatHistory.claude.length > 0 && (
+                  <button 
+                    className={`w-full text-left px-4 py-2 text-sm truncate ${selectedModel === 'claude' ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} rounded-md`}
+                    onClick={() => setSelectedModel('claude')}
+                  >
+                    {getChatTitle(chatHistory.claude)}
+                  </button>
+                )}
+              </div>
+            )}
+            
+            {/* Gemini Chats */}
+            {chatHistory.gemini.length > 0 && (
+              <div className="mb-2">
+                <div className="flex items-center px-2 mb-1">
+                  <div className="w-2 h-2 rounded-full bg-blue-500 mr-2"></div>
+                  <span className="text-xs text-gray-500 dark:text-gray-400">Gemini</span>
+                </div>
+                {chatHistory.gemini.length > 0 && (
+                  <button 
+                    className={`w-full text-left px-4 py-2 text-sm truncate ${selectedModel === 'gemini' ? 'bg-gray-200 dark:bg-gray-700' : 'hover:bg-gray-100 dark:hover:bg-gray-700'} rounded-md`}
+                    onClick={() => setSelectedModel('gemini')}
+                  >
+                    {getChatTitle(chatHistory.gemini)}
+                  </button>
+                )}
+              </div>
+            )}
+            
+            {/* Show message if no chat history */}
+            {chatHistory.gpt.length === 0 && chatHistory.claude.length === 0 && chatHistory.gemini.length === 0 && (
+              <div className="text-sm text-gray-500 dark:text-gray-400 text-center px-2">
+                No chat history yet
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="mt-auto pt-4 border-t dark:border-gray-700">
