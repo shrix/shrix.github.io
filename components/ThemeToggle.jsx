@@ -34,6 +34,7 @@ export default function ThemeToggle() {
     <button 
       onClick={toggleTheme}
       className="p-2 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
+      title={darkMode ? "Switch to light mode" : "Switch to dark mode"}
     >
       {darkMode ? (
         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
