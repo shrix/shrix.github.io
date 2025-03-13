@@ -7,25 +7,104 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
   const [selectedModel, setSelectedModel] = useState('gpt')
   const [apiStatus, setApiStatus] = useState('API Key Reqd for ChatGPT')
   const [isHovering, setIsHovering] = useState(false)
+  const [modelDisplayName, setModelDisplayName] = useState('ChatGPT 3.5 Turbo')
 
-  // Update API status when model changes
+  // Update API status and model display name when model changes
   useEffect(() => {
-    // Check local storage for API keys
+    // Check local storage for API keys and model versions
     const gptKey = localStorage.getItem('gpt-api-key')
     const claudeKey = localStorage.getItem('claude-api-key')
+    const gptModel = localStorage.getItem('gpt-model') || 'gpt-3.5-turbo'
+    const claudeModel = localStorage.getItem('claude-model') || 'claude-instant'
     
     if (selectedModel === 'gpt') {
-      setApiStatus(gptKey ? 'ChatGPT API Key set' : 'API Key Reqd for ChatGPT')
+      setApiStatus(gptKey ? 'OpenAI API Key set' : 'API Key Reqd for OpenAI')
+      
+      // Set display name based on model version
+      switch (gptModel) {
+        case 'gpt-3.5-turbo':
+          setModelDisplayName('ChatGPT 3.5 Turbo')
+          break
+        case 'gpt-4':
+          setModelDisplayName('ChatGPT 4')
+          break
+        case 'gpt-4-turbo':
+          setModelDisplayName('ChatGPT 4 Turbo')
+          break
+        case 'gpt-4o':
+          setModelDisplayName('ChatGPT 4o')
+          break
+        default:
+          setModelDisplayName('ChatGPT')
+      }
     } else if (selectedModel === 'claude') {
-      setApiStatus(claudeKey ? 'Claude API Key set' : 'API Key Reqd for Claude')
+      setApiStatus(claudeKey ? 'Anthropic API Key set' : 'API Key Reqd for Anthropic')
+      
+      // Set display name based on model version
+      switch (claudeModel) {
+        case 'claude-instant':
+          setModelDisplayName('Claude Instant')
+          break
+        case 'claude-3-haiku':
+          setModelDisplayName('Claude 3 Haiku')
+          break
+        case 'claude-3-sonnet':
+          setModelDisplayName('Claude 3 Sonnet')
+          break
+        case 'claude-3-opus':
+          setModelDisplayName('Claude 3 Opus')
+          break
+        default:
+          setModelDisplayName('Claude')
+      }
     } else {
       setApiStatus(`Gemini Flash 2.0 (Free)`)
+      setModelDisplayName('Gemini Flash 2.0')
     }
+  }, [selectedModel])
+
+  // Listen for changes to model versions in localStorage
+  useEffect(() => {
+    const handleStorageChange = () => {
+      // Force a re-render when model versions change
+      if (selectedModel === 'gpt') {
+        const gptModel = localStorage.getItem('gpt-model')
+        if (gptModel) {
+          // This will trigger the first useEffect
+          setSelectedModel(prev => {
+            if (prev === 'gpt') {
+              // Force re-render by toggling and then toggling back
+              setTimeout(() => setSelectedModel('gpt'), 0)
+              return 'gpt-temp'
+            }
+            return prev
+          })
+        }
+      } else if (selectedModel === 'claude') {
+        const claudeModel = localStorage.getItem('claude-model')
+        if (claudeModel) {
+          // This will trigger the first useEffect
+          setSelectedModel(prev => {
+            if (prev === 'claude') {
+              // Force re-render by toggling and then toggling back
+              setTimeout(() => setSelectedModel('claude'), 0)
+              return 'claude-temp'
+            }
+            return prev
+          })
+        }
+      }
+    }
+
+    window.addEventListener('storage', handleStorageChange)
+    return () => window.removeEventListener('storage', handleStorageChange)
   }, [selectedModel])
 
   // Save selected model to localStorage when it changes
   useEffect(() => {
-    localStorage.setItem('selectedModel', selectedModel)
+    if (selectedModel !== 'gpt-temp' && selectedModel !== 'claude-temp') {
+      localStorage.setItem('selectedModel', selectedModel)
+    }
   }, [selectedModel])
 
   // Determine if sidebar should be visible
@@ -86,10 +165,13 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
             value={selectedModel}
             onChange={(e) => setSelectedModel(e.target.value)}
           >
-            <option value="gpt">ChatGPT 3.5 Turbo (API Key)</option>
-            <option value="claude">Claude Instant (API Key)</option>
+            <option value="gpt">OpenAI (API Key)</option>
+            <option value="claude">Anthropic (API Key)</option>
             <option value="gemini">Gemini Flash 2.0 (Free)</option>
           </select>
+          <div className="mt-1 text-sm text-gray-600 dark:text-gray-400">
+            Using: {modelDisplayName}
+          </div>
         </div>
 
         <div className="flex-1">
