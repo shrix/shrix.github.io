@@ -23,7 +23,7 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -39,15 +39,31 @@ jobs:
         run: npm run build
       - name: Prepare for deployment
         run: |
-          # Ensure .nojekyll file exists in the output directory
-          touch out/.nojekyll
+          # Create a temporary directory for the build output
+          mkdir -p tmp_deploy
           
-          # Ensure CNAME file exists in the output directory
-          echo "shrix.com" > out/CNAME
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
-          force_orphan: false
-          keep_files: true 
+          # Copy the built Next.js app to the temporary directory
+          cp -r out/* tmp_deploy/
+          
+          # Ensure .nojekyll file exists
+          touch tmp_deploy/.nojekyll
+          
+          # Ensure CNAME file exists
+          echo "shrix.com" > tmp_deploy/CNAME
+          
+          # Preserve the .git directory and important files from the main branch
+          git checkout-index -a -f --prefix=tmp_deploy/
+          
+          # Move the temporary directory contents to the root
+          cp -r tmp_deploy/* .
+          cp -r tmp_deploy/.nojekyll .
+          
+          # Clean up
+          rm -rf tmp_deploy
+      - name: Commit and push changes
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Deploy Next.js app to GitHub Pages" || echo "No changes to commit"
+          git push 
