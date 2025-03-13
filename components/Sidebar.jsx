@@ -56,16 +56,18 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
               title={collapsed ? "Pin sidebar" : "Unpin sidebar"}
             >
               {collapsed ? (
-                // Pin sidebar icon (when sidebar is collapsed) - Claude desktop style
+                // Pin sidebar icon (when sidebar is collapsed) - Claude desktop style with vertical line
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="4" y1="12" x2="20" y2="12" />
                   <polyline points="15 7 20 12 15 17" />
+                  <line x1="9" y1="5" x2="9" y2="19" />
                 </svg>
               ) : (
-                // Unpin sidebar icon (when sidebar is expanded) - Claude desktop style
+                // Unpin sidebar icon (when sidebar is expanded) - Claude desktop style with vertical line
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="20" y1="12" x2="4" y2="12" />
                   <polyline points="9 7 4 12 9 17" />
+                  <line x1="15" y1="5" x2="15" y2="19" />
                 </svg>
               )}
             </button>
