@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && touch out/.nojekyll && echo 'shrix.com' > out/CNAME",
+    "build": "next build && cp public/CNAME public/.nojekyll out/",
     "start": "next start",
     "lint": "next lint"
   },
