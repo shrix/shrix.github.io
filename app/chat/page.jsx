@@ -9,7 +9,7 @@ export default function ChatPage() {
   const [messages, setMessages] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [selectedModel, setSelectedModel] = useState('gpt')
-  const [gptModel, setGptModel] = useState('gpt-3.5-turbo')
+  const [gptModel, setGptModel] = useState('gpt-4o-mini')
   const [claudeModel, setClaudeModel] = useState('claude-instant')
 
   // Get the selected model and model versions from localStorage when component mounts
@@ -35,7 +35,7 @@ export default function ChatPage() {
       if (e.key === 'selectedModel') {
         setSelectedModel(e.newValue || 'gpt')
       } else if (e.key === 'gpt-model') {
-        setGptModel(e.newValue || 'gpt-3.5-turbo')
+        setGptModel(e.newValue || 'gpt-4o-mini')
       } else if (e.key === 'claude-model') {
         setClaudeModel(e.newValue || 'claude-instant')
       }

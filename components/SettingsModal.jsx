@@ -6,7 +6,7 @@ export default function SettingsModal({ onClose }) {
   const [gptKey, setGptKey] = useState('')
   const [claudeKey, setClaudeKey] = useState('')
   const [selectedModel, setSelectedModel] = useState('gpt')
-  const [gptModel, setGptModel] = useState('gpt-3.5-turbo')
+  const [gptModel, setGptModel] = useState('gpt-4o-mini')
   const [claudeModel, setClaudeModel] = useState('claude-instant')
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export default function SettingsModal({ onClose }) {
     setGptKey(localStorage.getItem('gpt-api-key') || '')
     setClaudeKey(localStorage.getItem('claude-api-key') || '')
     setSelectedModel(localStorage.getItem('selectedModel') || 'gpt')
-    setGptModel(localStorage.getItem('gpt-model') || 'gpt-3.5-turbo')
+    setGptModel(localStorage.getItem('gpt-model') || 'gpt-4o-mini')
     setClaudeModel(localStorage.getItem('claude-model') || 'claude-instant')
   }, [])
 
@@ -64,7 +64,8 @@ export default function SettingsModal({ onClose }) {
                   value={gptModel}
                   onChange={(e) => setGptModel(e.target.value)}
                 >
-                  <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Cheapest)</option>
+                  <option value="gpt-4o-mini">GPT-4o Mini</option>
+                  <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
                   <option value="gpt-4">GPT-4</option>
                   <option value="gpt-4-turbo">GPT-4 Turbo</option>
                   <option value="gpt-4o">GPT-4o</option>
@@ -72,7 +73,7 @@ export default function SettingsModal({ onClose }) {
               </div>
               
               <div className="col-span-4 text-xs text-gray-500 dark:text-gray-400 text-right">
-                GPT-3.5 Turbo is the most cost-effective option
+                GPT-4o Mini and GPT-3.5 Turbo are more cost-effective options
               </div>
             </div>
           )}
@@ -99,7 +100,7 @@ export default function SettingsModal({ onClose }) {
                   value={claudeModel}
                   onChange={(e) => setClaudeModel(e.target.value)}
                 >
-                  <option value="claude-instant">Claude Instant (Cheapest)</option>
+                  <option value="claude-instant">Claude Instant</option>
                   <option value="claude-3-haiku">Claude 3 Haiku</option>
                   <option value="claude-3-sonnet">Claude 3 Sonnet</option>
                   <option value="claude-3-opus">Claude 3 Opus</option>
@@ -124,7 +125,7 @@ export default function SettingsModal({ onClose }) {
             onClick={saveSettings}
             className="bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white px-4 py-2 rounded-md"
           >
-            Save changes
+            {selectedModel === 'gemini' ? 'OK' : 'Save changes'}
           </button>
         </div>
       </div>

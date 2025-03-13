@@ -8,7 +8,7 @@ export async function POST(request) {
     
     // Get specific model versions from localStorage (client-side only)
     // In a real implementation, these would be passed from the client
-    const gptModel = request.headers.get('x-gpt-model') || 'gpt-3.5-turbo'
+    const gptModel = request.headers.get('x-gpt-model') || 'gpt-4o-mini'
     const claudeModel = request.headers.get('x-claude-model') || 'claude-instant'
     
     // Check for required API keys for paid models
@@ -62,6 +62,8 @@ export async function POST(request) {
 function getModelDisplayName(provider, modelId) {
   if (provider === 'gpt') {
     switch (modelId) {
+      case 'gpt-4o-mini':
+        return 'ChatGPT 4o Mini'
       case 'gpt-3.5-turbo':
         return 'ChatGPT 3.5 Turbo'
       case 'gpt-4':

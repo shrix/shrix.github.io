@@ -7,14 +7,14 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
   const [selectedModel, setSelectedModel] = useState('gpt')
   const [apiStatus, setApiStatus] = useState('API Key Reqd for ChatGPT')
   const [isHovering, setIsHovering] = useState(false)
-  const [modelDisplayName, setModelDisplayName] = useState('ChatGPT 3.5 Turbo')
+  const [modelDisplayName, setModelDisplayName] = useState('ChatGPT 4o Mini')
 
   // Update API status and model display name when model changes
   useEffect(() => {
     // Check local storage for API keys and model versions
     const gptKey = localStorage.getItem('gpt-api-key')
     const claudeKey = localStorage.getItem('claude-api-key')
-    const gptModel = localStorage.getItem('gpt-model') || 'gpt-3.5-turbo'
+    const gptModel = localStorage.getItem('gpt-model') || 'gpt-4o-mini'
     const claudeModel = localStorage.getItem('claude-model') || 'claude-instant'
     
     if (selectedModel === 'gpt') {
@@ -22,6 +22,9 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
       
       // Set display name based on model version
       switch (gptModel) {
+        case 'gpt-4o-mini':
+          setModelDisplayName('ChatGPT 4o Mini')
+          break
         case 'gpt-3.5-turbo':
           setModelDisplayName('ChatGPT 3.5 Turbo')
           break
