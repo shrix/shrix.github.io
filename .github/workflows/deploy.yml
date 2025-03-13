@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -25,24 +25,16 @@ jobs:
         with:
           node-version: "18"
           cache: 'npm'
-      - name: Setup Pages
-        uses: actions/configure-pages@v3
       - name: Install dependencies
         run: npm ci
       - name: Build with Next.js
         run: npm run build
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
-        with:
-          path: ./out
-
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
+      - name: Copy root files to out directory
+        run: |
+          cp index.html out/
+          cp CNAME out/
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2 
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: out
+          branch: gh-pages 
