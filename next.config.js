@@ -3,8 +3,6 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   output: 'export',
-  basePath: '/chat',
-  assetPrefix: '/chat/',  // assetPrefix requires the trailing slash
   images: {
     unoptimized: true,
   },
