@@ -5,7 +5,7 @@ const nextConfig = {
   output: 'export',
   // Fix asset paths for GitHub Pages
   basePath: '',
-  assetPrefix: './',  // Use relative paths for assets
+  assetPrefix: process.env.NODE_ENV === 'production' ? '/' : '',
   images: {
     unoptimized: true,
   },
