@@ -53,11 +53,21 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
             <button 
               className="p-[2px] rounded-md hover:bg-gray-200 dark:hover:bg-gray-700"
               onClick={() => setCollapsed(!collapsed)}
-              title={collapsed ? "Pin sidebar open" : "Collapse sidebar"}
+              title={collapsed ? "Show sidebar" : "Hide sidebar"}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 18l-6-6 6-6"></path>
-              </svg>
+              {collapsed ? (
+                // Show sidebar icon (when sidebar is collapsed)
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="9" y1="3" x2="9" y2="21"></line>
+                </svg>
+              ) : (
+                // Hide sidebar icon (when sidebar is expanded)
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                  <line x1="3" y1="9" x2="21" y2="9"></line>
+                </svg>
+              )}
             </button>
           </div>
         </div>
@@ -83,7 +93,7 @@ export default function Sidebar({ collapsed, setCollapsed, openSettings }) {
         </div>
 
         <div className="mt-auto pt-4 border-t dark:border-gray-700">
-          <div className="text-sm text-amber-600 dark:text-amber-400">{apiStatus}</div>
+          <div className="text-sm text-amber-600 dark:text-amber-400 text-center">{apiStatus}</div>
         </div>
       </div>
       
