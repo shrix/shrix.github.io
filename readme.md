@@ -1,87 +1,47 @@
-# zenorocha.com
+# Shrix Chat
 
-> My personal website <3
+Personal website and chat interface hosted at [shrix.com](https://shrix.com).
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fzenorocha%2Fzenorocha.com)
+## Project Structure
 
-## Technology stack
+This repository contains both the source code and the built static files for GitHub Pages deployment.
 
-- **Styling:** [Stitches](https://stitches.dev/)
-- **Content:** [Markdown](https://daringfireball.net/projects/markdown/)
-- **Back-end:** [Next.js](https://nextjs.org/)
-- **Front-end:** [React](https://reactjs.org/)
-- **Animation:** [Framer](https://www.framer.com/docs/animation/)
-- **Deployment:** [Vercel](https://vercel.com/)
+### Key Directories:
+- `/app`: Next.js application source code
+- `/components`: React components
+- `/layouts`: Page layout components
+- `/lib`: Utility functions and libraries
+- `/public`: Static assets
+- `/_next`, `/chat`, `/404.html`, `/index.html`: Generated files from the Next.js build
 
-## Running locally
+### Configuration Files:
+- `next.config.js`: Next.js configuration
+- `tailwind.config.js`: Tailwind CSS configuration
+- `postcss.config.js`: PostCSS configuration
+- `jsconfig.json`: JavaScript configuration for the project
+- `package.json`: Project dependencies and scripts
+- `.nojekyll`: Prevents GitHub Pages from processing the site with Jekyll
+- `CNAME`: Sets the custom domain for GitHub Pages
 
-1. Clone this repo:
+## Development
 
-```sh
-$ git clone https://github.com/zenorocha/zenorocha.com.git
-```
-
-2. Then go to the project's folder:
-
-```sh
-cd zenorocha.com
-```
-
-3. Install all dependencies:
-
-```sh
+```bash
+# Install dependencies
 npm install
-```
 
-4. Run locally:
-
-```sh
+# Start development server
 npm run dev
+
+# Build for production
+npm run build
+
+# Deploy to GitHub Pages
+npm run deploy
 ```
 
-## File structure
+## Deployment
 
-The basic file structure for the project is organized in the following way:
-
-```
-.
-|-- articles
-|-- components
-|-- data
-|-- layouts
-|-- lib
-|-- pages
-`-- public
-```
-
-### [articles](https://github.com/zenorocha/zenorocha.com/tree/master/articles)
-
-Here you'll find a list of markdown files for each post.
-
-### [components](https://github.com/zenorocha/zenorocha.com/tree/master/components)
-
-Here you'll find reusable blocks of React components.
-
-### [data](https://github.com/zenorocha/zenorocha.com/tree/master/data)
-
-Here you'll find JSON files that populates each section.
-
-### [layouts](https://github.com/zenorocha/zenorocha.com/tree/master/layouts)
-
-Here you'll find default templates for different pages.
-
-### [lib](https://github.com/zenorocha/zenorocha.com/tree/master/lib)
-
-Here you'll find a set of utilities.
-
-### [pages](https://github.com/zenorocha/zenorocha.com/tree/master/pages)
-
-Here you'll find all the main pages of the site.
-
-### [public](https://github.com/zenorocha/zenorocha.com/blob/master/public)
-
-Here you'll find all the CSS, images, and font files.
-
-## License
-
-[MIT License](http://zenorocha.mit-license.org/) © Zeno Rocha
+The site is deployed to GitHub Pages using the `deploy` script in package.json, which:
+1. Builds the Next.js application
+2. Creates necessary files for GitHub Pages (.nojekyll, CNAME)
+3. Copies the built files to the repository root for GitHub Pages deployment 
