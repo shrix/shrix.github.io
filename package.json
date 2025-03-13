@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "touch out/.nojekyll && gh-pages -d out -t -b gh-pages -e chat"
+    "deploy": "touch out/.nojekyll && echo 'shrix.com' > out/CNAME && gh-pages -d out -t -b gh-pages -e chat"
   },
   "dependencies": {
     "next": "^14.0.0",
