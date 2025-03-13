@@ -28,42 +28,34 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: "18"
           cache: 'npm'
+      
       - name: Install dependencies
         run: npm ci
+      
       - name: Build with Next.js
         run: npm run build
-      - name: Prepare for deployment
+      
+      - name: Prepare and deploy
         run: |
-          # Create a temporary directory for the build output
-          mkdir -p tmp_deploy
+          # Ensure .nojekyll and CNAME files exist
+          touch out/.nojekyll
+          echo "shrix.com" > out/CNAME
           
-          # Copy the built Next.js app to the temporary directory
-          cp -r out/* tmp_deploy/
+          # Copy the built files to the root directory
+          cp -r out/* .
+          cp out/.nojekyll .
           
-          # Ensure .nojekyll file exists
-          touch tmp_deploy/.nojekyll
-          
-          # Ensure CNAME file exists
-          echo "shrix.com" > tmp_deploy/CNAME
-          
-          # Preserve the .git directory and important files from the main branch
-          git checkout-index -a -f --prefix=tmp_deploy/
-          
-          # Move the temporary directory contents to the root
-          cp -r tmp_deploy/* .
-          cp -r tmp_deploy/.nojekyll .
-          
-          # Clean up
-          rm -rf tmp_deploy
-      - name: Commit and push changes
-        run: |
+          # Configure Git
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
+          
+          # Commit and push changes
           git add .
           git commit -m "Deploy Next.js app to GitHub Pages" || echo "No changes to commit"
           git push 
