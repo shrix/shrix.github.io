@@ -4,55 +4,22 @@ import { useState } from 'react'
 
 export default function Message({ role, content, modelType = 'gpt' }) {
   const [copied, setCopied] = useState(false)
+  const isUser = role === 'user'
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(content)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
-  }
-
-  // Get model-specific indicator color
-  const getModelIndicatorColor = () => {
-    switch (modelType) {
-      case 'gpt':
-        return 'bg-green-500'
-      case 'claude':
-        return 'bg-purple-500'
-      case 'gemini':
-        return 'bg-blue-500'
-      default:
-        return 'bg-gray-500'
-    }
-  }
-
-  // Get model name for display
-  const getModelName = () => {
-    switch (modelType) {
-      case 'gpt':
-        return 'OpenAI'
-      case 'claude':
-        return 'Claude'
-      case 'gemini':
-        return 'Gemini'
-      default:
-        return 'AI'
-    }
+    navigator.clipboard.writeText(content).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    })
   }
 
   return (
-    <div className={`${role === 'user' ? 'user-message' : 'assistant-message'} relative group`}>
-      {/* Model indicator for assistant messages */}
-      {role === 'assistant' && (
-        <div className="absolute -left-2 top-0 flex items-center">
-          <div className={`w-1 h-full ${getModelIndicatorColor()}`}></div>
-          <div className="absolute -left-1 top-0 opacity-0 group-hover:opacity-100 transition-opacity">
-            <div className="ml-4 px-2 py-1 bg-white dark:bg-gray-800 rounded shadow-md text-xs">
-              {getModelName()}
-            </div>
-          </div>
-        </div>
-      )}
+    <div className={`message ${isUser ? 'user-message' : 'assistant-message'} mb-4 relative group`}>
+      <div className={`px-4 py-2 rounded-lg ${isUser ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200' : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'}`}>
+        {content}
+      </div>
       
+      {/* Copy button */}
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button 
           onClick={copyToClipboard}
@@ -71,7 +38,6 @@ export default function Message({ role, content, modelType = 'gpt' }) {
           )}
         </button>
       </div>
-      <div className="whitespace-pre-wrap">{content}</div>
     </div>
   )
 }
