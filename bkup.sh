@@ -1,23 +1,32 @@
 #!/bin/bash
 
-# Create backup directory if it doesn't exist
 mkdir -p bkup
 
-# Rotate existing backups
-if [ -d "bkup/v2" ]; then
-    rm -rf bkup/v3
-    mv bkup/v2 bkup/v3
-fi
-
+# Determine which version number to use
+version=1
 if [ -d "bkup/v1" ]; then
-    mv bkup/v1 bkup/v2
+    version=2
+fi
+if [ -d "bkup/v2" ]; then
+    version=3
 fi
 
-# Create new backup directory
-mkdir -p bkup/v1
+# Rotate existing backups (v3 -> v2 -> v1)
+if [ -d "bkup/v1" ]; then
+    rm -rf bkup/v1
+fi
+
+if [ -d "bkup/v2" ]; then
+    mv bkup/v2 bkup/v1
+fi
+
+if [ -d "bkup/v3" ]; then
+    mv bkup/v3 bkup/v2
+fi
+
+mkdir -p bkup/v3
 
 # Copy essential files and directories
-# Copying only the necessary files, avoiding node_modules, .next, etc.
 cp -r \
     app \
     components \
@@ -34,9 +43,6 @@ cp -r \
     push.sh \
     readme.md \
     tailwind.config.js \
-    bkup/v1/
+    bkup/v3/
 
-echo "Backup completed successfully!"
-echo "Latest version is in bkup/v1/"
-echo "Previous version is in bkup/v2/ (if it exists)"
-echo "Oldest version is in bkup/v3/ (if it exists)" 
+echo "Backup completed successfully in bkup/v$version" 

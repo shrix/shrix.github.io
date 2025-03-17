@@ -15,7 +15,7 @@ export default function Message({ role, content, modelType = 'gpt' }) {
 
   return (
     <div className={`message ${isUser ? 'user-message' : 'assistant-message'} mb-4 relative group`}>
-      <div className={`px-4 py-2 rounded-lg ${isUser ? 'bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200' : 'bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200'}`}>
+      <div className="text-black dark:text-white">
         {content}
       </div>
       
@@ -23,7 +23,7 @@ export default function Message({ role, content, modelType = 'gpt' }) {
       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button 
           onClick={copyToClipboard}
-          className="p-1 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="p-1 rounded hover:bg-gray-700"
           title="Copy to clipboard"
         >
           {copied ? (
